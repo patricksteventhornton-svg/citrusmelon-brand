@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Intelligence Assessment — CitrusMelon</title>
+<meta name="description" content="Find out exactly where your brand stands and what to do next. Free diagnostic from CitrusMelon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #181613;
+  --paper: #f6f2eb;
+  --warm-mid: #e8e2d6;
+  --warm-deep: #cec5b4;
+  --accent: #c4500a;
+  --accent-hover: #a84009;
+  --accent-light: #f5e8df;
+  --muted: #7a726a;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ─── Grain overlay ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 2.5rem;
+  background: rgba(246,242,235,0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(26,22,19,0.08);
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.nav-logo span { color: var(--accent); font-style: italic; }
+.nav-cta {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+  font-family: var(--sans);
+}
+.nav-cta:hover { color: var(--accent); }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 2.5rem 5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -52%);
+  font-family: var(--serif);
+  font-size: clamp(100px, 22vw, 280px);
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(26,22,19,0.07);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.25rem;
+  opacity: 0;
+  animation: riseIn 0.8s 0.2s ease both;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 6.5vw, 5.5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  max-width: 900px;
+  opacity: 0;
+  animation: riseIn 0.9s 0.35s ease both;
+}
+.hero h1 em { font-style: italic; color: var(--accent); }
+
+.hero-sub {
+  font-size: clamp(16px, 1.8vw, 19px);
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 560px;
+  margin-top: 1.5rem;
+  font-weight: 300;
+  opacity: 0;
+  animation: riseIn 0.9s 0.5s ease both;
+}
+
+.hero-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: riseIn 0.9s 0.65s ease both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 28px;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  letter-spacing: 0.01em;
+}
+.btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+.btn-primary .arrow { font-size: 18px; transition: transform 0.2s; }
+.btn-primary:hover .arrow { transform: translateX(3px); }
+
+.hero-note {
+  font-size: 13px;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* ─── SCROLL INDICATOR ─── */
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  right: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: riseIn 1s 1s ease both;
+}
+.scroll-hint span {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  writing-mode: vertical-rl;
+}
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: var(--warm-deep);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-line::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  animation: scrollDrop 1.8s 1.2s ease infinite;
+}
+@keyframes scrollDrop {
+  from { top: -100%; }
+  to { top: 100%; }
+}
+
+/* ─── VALUE SECTION ─── */
+.section {
+  padding: 6rem 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.section-headline {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  max-width: 720px;
+  margin-bottom: 1.5rem;
+}
+.section-headline em { font-style: italic; color: var(--accent); }
+
+.section-body {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--muted);
+  max-width: 620px;
+  font-weight: 300;
+}
+
+/* ─── THREE TRUTHS ─── */
+.truths {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 5rem 2.5rem;
+}
+.truths-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.truths .section-label { color: rgba(246,242,235,0.4); }
+.truths .section-headline { color: var(--paper); max-width: 100%; margin-bottom: 3rem; }
+.truths-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0;
+  border-top: 1px solid rgba(246,242,235,0.1);
+}
+.truth-item {
+  padding: 2.5rem 2rem 2.5rem 0;
+  border-bottom: 1px solid rgba(246,242,235,0.1);
+}
+.truth-num {
+  font-family: var(--serif);
+  font-size: 3rem;
+  font-style: italic;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+.truth-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+.truth-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(246,242,235,0.55);
+  font-weight: 300;
+}
+
+/* ─── WHAT YOU GET ─── */
+.deliverables {
+  padding: 6rem 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.deliverables-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--warm-mid);
+  border: 1px solid var(--warm-mid);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 3rem;
+}
+.deliv-cell {
+  background: var(--paper);
+  padding: 2rem;
+  transition: background 0.2s;
+}
+.deliv-cell:hover { background: var(--accent-light); }
+.deliv-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--ink);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.deliv-icon svg { width: 16px; height: 16px; fill: var(--paper); }
+.deliv-title {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.deliv-text {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ─── HOW IT WORKS ─── */
+.how {
+  background: var(--warm-mid);
+  padding: 6rem 2.5rem;
+}
+.how-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.step {
+  position: relative;
+}
+.step-num {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.step-num::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--warm-deep);
+}
+.step-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.step-text {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ─── ABOUT STRIP ─── */
+.about {
+  padding: 5rem 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 5rem;
+  align-items: center;
+}
+.about-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+.about h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+.about p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--muted);
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.about-stat-num {
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.about-stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ─── GATE FORM ─── */
+#gate {
+  background: var(--ink);
+  padding: 6rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+#gate::before {
+  content: 'Start';
+  position: absolute;
+  font-family: var(--serif);
+  font-size: 40vw;
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(246,242,235,0.04);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  white-space: nowrap;
+  line-height: 1;
+}
+.gate-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.gate-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(246,242,235,0.4); margin-bottom: 1rem; }
+.gate-inner h2 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  color: var(--paper);
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+}
+.gate-inner p {
+  font-size: 16px;
+  color: rgba(246,242,235,0.5);
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-field.full { grid-column: 1 / -1; }
+.form-field label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(246,242,235,0.4);
+}
+.form-field input,
+.form-field select {
+  background: rgba(246,242,235,0.06);
+  border: 1px solid rgba(246,242,235,0.15);
+  border-radius: 6px;
+  padding: 13px 16px;
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--paper);
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+.form-field input::placeholder { color: rgba(246,242,235,0.25); }
+.form-field input:focus,
+.form-field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(196,80,10,0.08);
+}
+.form-field select option { background: #2a2420; color: var(--paper); }
+
+.ignite-btn {
+  width: 100%;
+  margin-top: 8px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 17px 28px;
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-style: italic;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, letter-spacing 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  letter-spacing: -0.01em;
+}
+.ignite-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  letter-spacing: 0.02em;
+}
+.ignite-btn .btn-arrow {
+  font-style: normal;
+  font-family: var(--sans);
+  font-size: 20px;
+  transition: transform 0.2s;
+}
+.ignite-btn:hover .btn-arrow { transform: translateX(4px); }
+
+.form-disclaimer {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(246,242,235,0.25);
+  margin-top: 1rem;
+}
+
+/* ─── ASSESSMENT SECTION ─── */
+#assessment-section {
+  display: none;
+  background: var(--ink);
+  padding: 0 2.5rem 6rem;
+}
+.assessment-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ─── CHAT (reused from app) ─── */
+.chat-shell {
+  background: rgba(246,242,235,0.04);
+  border: 1px solid rgba(246,242,235,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.chat-top {
+  border-bottom: 1px solid rgba(246,242,235,0.08);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.chat-top-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 2s ease infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.chat-top-label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(246,242,235,0.4);
+}
+
+#chat-area {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 200px;
+}
+
+.msg { display: flex; gap: 10px; animation: riseIn 0.3s ease both; }
+
+.msg-avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 500;
+}
+.msg-avatar.ai { background: var(--accent); color: white; }
+.msg-avatar.user { background: rgba(246,242,235,0.12); color: rgba(246,242,235,0.6); }
+
+.msg-bubble { flex: 1; }
+.msg-name {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(246,242,235,0.3);
+  margin-bottom: 5px;
+}
+.msg-text {
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(246,242,235,0.85);
+}
+.msg.user .msg-text {
+  color: rgba(246,242,235,0.45);
+  font-style: italic;
+}
+
+.options-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+.opt-chip {
+  padding: 7px 14px;
+  border: 1px solid rgba(246,242,235,0.18);
+  border-radius: 20px;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: rgba(246,242,235,0.7);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.opt-chip:hover { border-color: var(--accent); color: var(--accent); background: rgba(196,80,10,0.12); }
+.opt-chip.selected { border-color: var(--accent); background: var(--accent); color: white; }
+
+.chat-input-row {
+  border-top: 1px solid rgba(246,242,235,0.08);
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px;
+}
+#free-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--paper);
+  resize: none;
+  min-height: 36px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+#free-input:focus { outline: none; }
+#free-input::placeholder { color: rgba(246,242,235,0.2); }
+
+.send-btn {
+  width: 36px; height: 36px;
+  border-radius: 6px;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s;
+}
+.send-btn:hover { opacity: 0.85; }
+.send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.send-btn svg { width: 14px; height: 14px; fill: white; }
+
+.thinking {
+  display: flex; gap: 4px; align-items: center; padding: 2px 0;
+}
+.thinking span {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(246,242,235,0.3);
+  animation: pulse 1.2s ease infinite;
+}
+.thinking span:nth-child(2) { animation-delay: 0.2s; }
+.thinking span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes pulse { 0%,80%,100%{opacity:0.3;transform:scale(0.85)} 40%{opacity:1;transform:scale(1)} }
+
+/* ─── PROGRESS BAR (assessment) ─── */
+.progress-wrap {
+  padding: 1rem 1.5rem 0;
+}
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(246,242,235,0.3);
+  margin-bottom: 6px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.progress-bar {
+  height: 2px;
+  background: rgba(246,242,235,0.08);
+  border-radius: 1px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 1px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* ─── REPORT ─── */
+#report-section {
+  display: none;
+  padding: 3rem 1.5rem;
+}
+.report-card {
+  border: 1px solid rgba(246,242,235,0.12);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.report-header {
+  padding: 2rem;
+  border-bottom: 1px solid rgba(246,242,235,0.1);
+}
+.tier-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+.report-header h3 {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--paper);
+  line-height: 1.25;
+  margin-bottom: 0.5rem;
+}
+.report-header p { font-size: 14px; color: rgba(246,242,235,0.45); line-height: 1.6; }
+.report-body { padding: 1.5rem 2rem; }
+
+.score-row {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+.score-cell {
+  background: rgba(246,242,235,0.05);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+.score-num {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  font-style: italic;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.score-lbl {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(246,242,235,0.3);
+}
+
+.report-block { margin-bottom: 1.5rem; }
+.report-block-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(246,242,235,0.3);
+  border-bottom: 1px solid rgba(246,242,235,0.08);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+.report-block-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(246,242,235,0.7);
+  white-space: pre-wrap;
+}
+.platform-tags {
+  display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px;
+}
+.platform-tag {
+  padding: 5px 12px;
+  background: rgba(196,80,10,0.2);
+  color: #f0916a;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.cm-fit-block {
+  background: rgba(196,80,10,0.1);
+  border: 1px solid rgba(196,80,10,0.25);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.cm-fit-block .report-block-title { color: rgba(240,145,106,0.7); border-color: rgba(196,80,10,0.2); }
+
+.dl-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  border: none;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: opacity 0.15s;
+}
+.dl-btn:hover { opacity: 0.85; }
+
+.book-link {
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 14px;
+  color: rgba(246,242,235,0.35);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+.book-link:hover { color: var(--accent); }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--ink);
+  border-top: 1px solid rgba(246,242,235,0.07);
+  padding: 2rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-logo {
+  font-family: var(--serif);
+  font-style: italic;
+  color: rgba(246,242,235,0.35);
+  font-size: 1rem;
+}
+.footer-note {
+  font-size: 12px;
+  color: rgba(246,242,235,0.2);
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 700px) {
+  nav { padding: 1rem 1.25rem; }
+  .hero { padding: 0 1.25rem 4rem; }
+  .hero h1 { font-size: 2.6rem; }
+  .section { padding: 4rem 1.25rem; }
+  .truths { padding: 4rem 1.25rem; }
+  .deliverables-grid { grid-template-columns: 1fr; }
+  .about { grid-template-columns: 1fr; gap: 2rem; padding: 4rem 1.25rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  #gate { padding: 4rem 1.25rem; }
+  #assessment-section { padding: 0 1.25rem 4rem; }
+  footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Citrus<span>Melon</span></a>
+  <button class="nav-cta" onclick="document.getElementById('gate').scrollIntoView({behavior:'smooth'})">Take the assessment</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">Brand</div>
+  <div class="hero-eyebrow">Free Brand Intelligence Assessment</div>
+  <h1>Most brands are<br>flying <em>blind.</em></h1>
+  <p class="hero-sub">You've got products, services, a team. But if your brand, marketing, and sales aren't aligned — you're leaving growth on the table every single day.</p>
+  <div class="hero-cta-row">
+    <button class="btn-primary" onclick="document.getElementById('gate').scrollIntoView({behavior:'smooth'})">
+      Find out where you stand <span class="arrow">→</span>
+    </button>
+    <span class="hero-note">Takes 4 minutes. No fluff.</span>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- VALUE -->
+<section class="section reveal">
+  <div class="section-label">The problem</div>
+  <h2 class="section-headline">The world moved fast. Most brands <em>didn't.</em></h2>
+  <p class="section-body">You don't need another agency deck. You need an honest read on where your brand actually stands — what's working, what's wasted, and what the highest-leverage move is right now.</p>
+  <p class="section-body" style="margin-top:1rem">This assessment was built by a strategist who has led brand, growth, and creative direction across industries for 15 years. It asks the questions most consultants skip.</p>
+</section>
+
+<!-- THREE TRUTHS -->
+<section class="truths">
+  <div class="truths-inner">
+    <div class="section-label">What we believe</div>
+    <h2 class="section-headline reveal">Brand is infrastructure.<br>Not decoration.</h2>
+    <div class="truths-grid">
+      <div class="truth-item reveal">
+        <div class="truth-num">01</div>
+        <div class="truth-title">Clarity before channels</div>
+        <div class="truth-text">The platform isn't the problem. Every business has some mix of brand, marketing, and sales needs — the question is which lever matters most, right now, for your stage and industry.</div>
+      </div>
+      <div class="truth-item reveal">
+        <div class="truth-num">02</div>
+        <div class="truth-title">Direction over decoration</div>
+        <div class="truth-text">A logo doesn't build a brand. Positioning, messaging architecture, and channel strategy do. We care about the decisions that compound — not the ones that look good in a slide.</div>
+      </div>
+      <div class="truth-item reveal">
+        <div class="truth-num">03</div>
+        <div class="truth-title">Built to outlast the moment</div>
+        <div class="truth-text">Trend-chasing is expensive. We build brand infrastructure that holds shape over time, scales with your team, and doesn't need to be rebuilt every 18 months.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU GET -->
+<section class="deliverables reveal">
+  <div class="section-label">What you'll walk away with</div>
+  <h2 class="section-headline">A real report.<br>Not a <em>brochure.</em></h2>
+  <div class="deliverables-grid">
+    <div class="deliv-cell">
+      <div class="deliv-icon">
+        <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 2a5 5 0 1 1 0 10A5 5 0 0 1 8 3zm.5 2.5h-1v4l3 1.5.5-.87-2.5-1.25z"/></svg>
+      </div>
+      <div class="deliv-title">Brand + Marketing + Sales Scores</div>
+      <div class="deliv-text">A clear numerical read across the three pillars — where you're strong, where you're leaking growth.</div>
+    </div>
+    <div class="deliv-cell">
+      <div class="deliv-icon">
+        <svg viewBox="0 0 16 16"><path d="M2 11h12v1H2zm2-3h8v1H4zm3-3h2v1H7zM2 2h12v1H2z"/></svg>
+      </div>
+      <div class="deliv-title">Your tier + honest diagnosis</div>
+      <div class="deliv-text">Foundational, Growth-Ready, Scaling, or Enterprise — with a plain-language explanation of what that means for your next move.</div>
+    </div>
+    <div class="deliv-cell">
+      <div class="deliv-icon">
+        <svg viewBox="0 0 16 16"><path d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8zm7-6a6 6 0 1 0 0 12A6 6 0 0 0 8 2zm1 3H7v5h2zm0 6H7v2h2z"/></svg>
+      </div>
+      <div class="deliv-title">Platform stack for your business</div>
+      <div class="deliv-text">Not a generic list. Specific channels and platforms that make sense for your industry, stage, and budget right now.</div>
+    </div>
+    <div class="deliv-cell">
+      <div class="deliv-icon">
+        <svg viewBox="0 0 16 16"><path d="M3 1h10a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm0 1v12h10V2zm2 2h6v1H5zm0 3h6v1H5zm0 3h4v1H5z"/></svg>
+      </div>
+      <div class="deliv-title">12-month roadmap</div>
+      <div class="deliv-text">A phased, budget-aware action plan. What to do first, what to do when you have more runway, and what to skip entirely.</div>
+    </div>
+    <div class="deliv-cell">
+      <div class="deliv-icon">
+        <svg viewBox="0 0 16 16"><path d="M1 13V3l5 5-5 5zm6-1h8v1H7zm0-4h8v1H7zm0-4h8v1H7z"/></svg>
+      </div>
+      <div class="deliv-title">Financial outlook</div>
+      <div class="deliv-text">What the ROI picture looks like if you execute — realistic, not hype, calibrated to your budget tier.</div>
+    </div>
+    <div class="deliv-cell">
+      <div class="deliv-icon">
+        <svg viewBox="0 0 16 16"><path d="M8 1a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zm0 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM2 14v-1.5C2 10.6 4.7 9 8 9s6 1.6 6 3.5V14H2z"/></svg>
+      </div>
+      <div class="deliv-title">Downloadable brand brief</div>
+      <div class="deliv-text">Take the full report into your next team or board meeting. No login required, no paywall.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="how-inner reveal">
+    <div class="section-label">How it works</div>
+    <h2 class="section-headline">Four minutes.<br>Real answers.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">Step one</div>
+        <div class="step-title">Tell us about your business</div>
+        <div class="step-text">Name, email, industry — that's it. No pitch deck required.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">Step two</div>
+        <div class="step-title">Answer 6–8 sharp questions</div>
+        <div class="step-text">An AI strategist guides the conversation — adaptive, direct, and specific to your situation.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">Step three</div>
+        <div class="step-title">Get your brand report</div>
+        <div class="step-text">Scored across brand, marketing, and sales. With a roadmap and platform stack built for your stage.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">Step four</div>
+        <div class="step-title">Go further if you want</div>
+        <div class="step-text">Book a 30-min call to go deeper. No pressure, no script. Just strategy.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="reveal">
+    <div class="about-stats">
+      <div>
+        <div class="about-stat-num">15+</div>
+        <div class="about-stat-label">Years across brand, growth & creative direction</div>
+      </div>
+      <div>
+        <div class="about-stat-num">$1M+</div>
+        <div class="about-stat-label">Donated to youth programs via Born & Raised nonprofit</div>
+      </div>
+      <div>
+        <div class="about-stat-num">Full-</div>
+        <div class="about-stat-label">Funnel capability across brand through performance</div>
+      </div>
+      <div>
+        <div class="about-stat-num">NYC</div>
+        <div class="about-stat-label">Based. Clients nationally and beyond.</div>
+      </div>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="about-label">About CitrusMelon</div>
+    <h2>The creative lens for businesses ready to grow.</h2>
+    <p>CitrusMelon is a boutique creative strategy and brand-building agency. We work at the intersection of brand infrastructure, growth marketing, and creative direction — the stuff that actually moves the business, not just the aesthetic.</p>
+    <p>We're not a traditional agency. We're the missing creative layer between where your brand is and where it needs to go.</p>
+  </div>
+</section>
+
+<!-- GATE FORM -->
+<section id="gate">
+  <div class="gate-inner">
+    <div class="gate-label">Free Assessment</div>
+    <h2>Ready to find out<br>where you really stand?</h2>
+    <p>No salesperson, no pitch deck. Just an honest read on your brand — and a clear path forward.</p>
+
+    <div id="gate-form">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>First name</label>
+          <input type="text" id="f-name" placeholder="Alex" autocomplete="given-name">
+        </div>
+        <div class="form-field">
+          <label>Last name</label>
+          <input type="text" id="f-last" placeholder="Rivera" autocomplete="family-name">
+        </div>
+        <div class="form-field full">
+          <label>Work email</label>
+          <input type="email" id="f-email" placeholder="alex@yourcompany.com" autocomplete="email">
+        </div>
+        <div class="form-field full">
+          <label>Industry</label>
+          <select id="f-industry">
+            <option value="" disabled selected>Select your industry</option>
+            <option>Technology / SaaS</option>
+            <option>Healthcare / Wellness</option>
+            <option>Professional Services</option>
+            <option>Retail / E-commerce</option>
+            <option>Real Estate</option>
+            <option>Finance / Fintech</option>
+            <option>Food & Beverage</option>
+            <option>Manufacturing / B2B</option>
+            <option>Creative / Media / Entertainment</option>
+            <option>Nonprofit / Education</option>
+            <option>Hospitality / Travel</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="ignite-btn" onclick="startAssessment()">
+        Ignite <span class="btn-arrow">→</span>
+      </button>
+      <p class="form-disclaimer">Free. No credit card. No spam. Ever.</p>
+    </div>
+
+    <div id="assessment-section" style="display:none;">
+      <div class="assessment-wrap">
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span id="progress-text">Assessment in progress</span>
+            <span id="progress-pct">0%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+
+        <div class="chat-shell">
+          <div class="chat-top">
+            <div class="chat-top-dot"></div>
+            <div class="chat-top-label">CitrusMelon Brand Strategist</div>
+          </div>
+          <div id="chat-area"></div>
+          <div class="chat-input-row" id="input-row" style="display:none">
+            <textarea id="free-input" rows="1" placeholder="Type your answer…"></textarea>
+            <button class="send-btn" id="send-btn" onclick="sendFreeText()">
+              <svg viewBox="0 0 16 16"><path d="M2 13.5l12-5.5L2 2.5v4l8 1-8 1z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="report-section">
+          <div class="report-card" id="report-card"></div>
+          <button class="dl-btn" onclick="downloadReport()">Download Brand Brief</button>
+          <a class="book-link" href="mailto:hello@citrusmelon.com?subject=Brand Assessment — Let's go deeper">Let's go deeper — book 30 minutes →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CitrusMelon</div>
+  <div class="footer-note">© 2025 CitrusMelon. All rights reserved.</div>
+</footer>
+
+<script>
+/* ── Scroll reveals ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ── Assessment engine ── */
+const API_URL = "/api/claude";
+
+const SYSTEM = `You are a senior brand strategist conducting a diagnostic assessment for a potential client of CitrusMelon, a boutique creative strategy and brand-building agency led by Patrick Thornton.
+
+Your job: ask sharp, specific questions to understand where this business is TODAY. Cover:
+1. Business type, stage, industry (you may already know the industry)
+2. Current brand presence (website, visual identity, messaging)
+3. Marketing channels active (paid, organic, email, social, content)
+4. Sales motion (inbound, outbound, referral, e-commerce, enterprise)
+5. Budget signal: bootstrap (<$2k/mo) / growing ($2-8k/mo) / established ($8-25k/mo) / scale ($25k+/mo)
+6. Biggest current pain point
+7. Goal in the next 12 months
+
+Ask ONE question at a time. Be direct. Keep under 3 sentences. No em dashes. No generic advice mid-conversation.
+
+When you have enough context (after 6-8 exchanges), say ONLY: ASSESSMENT_COMPLETE`;
+
+const REPORT_SYSTEM = `You are a senior brand strategist at CitrusMelon. Based on the conversation transcript, produce a JSON brand assessment. Return ONLY valid JSON — no markdown fences, no preamble.
+
+Schema:
+{
+  "tier": "Foundational | Growth-Ready | Scaling | Enterprise",
+  "tier_note": "one sentence",
+  "headline": "sharp 8-12 word diagnosis",
+  "brand_score": 1-10,
+  "marketing_score": 1-10,
+  "sales_score": 1-10,
+  "summary": "2-3 sentences honest assessment",
+  "top_priority": "single most important action right now",
+  "platforms": ["3-5 specific platforms/channels for THIS business"],
+  "platform_rationale": "2 sentences why these platforms",
+  "twelve_month_roadmap": "3-4 sentences phased plan",
+  "budget_tier": "Bootstrap (<$2k/mo) | Growing ($2-8k/mo) | Established ($8-25k/mo) | Scale ($25k+/mo)",
+  "financial_outlook": "2-3 sentences realistic ROI picture",
+  "citrusmelon_fit": "1-2 sentences specific to their situation"
+}`;
+
+let history = [], questionCount = 0, fullTranscript = "", userData = {}, reportData = null;
+
+function addMsg(role, text, opts = []) {
+  const area = document.getElementById('chat-area');
+  const d = document.createElement('div');
+  d.className = 'msg';
+  const isAI = role === 'ai';
+  d.innerHTML = `
+    <div class="msg-avatar ${isAI ? 'ai' : 'user'}">${isAI ? 'CM' : (userData.name ? userData.name[0].toUpperCase() : 'U')}</div>
+    <div class="msg-bubble">
+      ${isAI ? '<div class="msg-name">CitrusMelon</div>' : ''}
+      <div class="msg-text">${text}</div>
+      ${opts.length ? `<div class="options-grid">${opts.map(o => `<button class="opt-chip" onclick="selectOpt('${o.replace(/'/g,"&#39;")}')">${o}</button>`).join('')}</div>` : ''}
+    </div>`;
+  area.appendChild(d);
+  d.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function addThinking() {
+  const area = document.getElementById('chat-area');
+  const d = document.createElement('div');
+  d.id = 'thinking';
+  d.className = 'msg';
+  d.innerHTML = `<div class="msg-avatar ai">CM</div><div class="msg-bubble"><div class="msg-name">CitrusMelon</div><div class="thinking"><span></span><span></span><span></span></div></div>`;
+  area.appendChild(d);
+  d.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function removeThinking() { const el = document.getElementById('thinking'); if (el) el.remove(); }
+
+function updateProgress() {
+  const pct = Math.min(Math.round((questionCount / 8) * 100), 95);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-text').textContent =
+    questionCount < 2 ? 'Getting to know your business' :
+    questionCount < 5 ? 'Mapping your brand ecosystem' : 'Finalizing your profile';
+}
+
+function detectOpts(text) {
+  const t = text.toLowerCase();
+  if (t.includes('stage') || t.includes('how long') || t.includes('years in business')) return ['Pre-launch','Under 2 years','2–5 years','5+ years'];
+  if (t.includes('budget') || t.includes('invest') || t.includes('spend')) return ['Under $2k/mo','$2–8k/mo','$8–25k/mo','$25k+/mo'];
+  if (t.includes('biggest') || t.includes('main challenge') || t.includes('pain')) return ['No clear brand identity','Not enough leads','Poor conversion','Standing out from competitors','Scaling the team'];
+  if (t.includes('goal') || t.includes('next 12') || t.includes('priority')) return ['More qualified leads','Brand repositioning','Launch a new product/service','Enter a new market','Build team & systems'];
+  if (t.includes('channel') || t.includes('marketing currently') || t.includes('active')) return ['Mostly referrals','Social media','Paid ads','Content / SEO','Email','None really'];
+  if (t.includes('website') || t.includes('online presence')) return ['No website yet','Basic / outdated','Functional but generic','Strong and converting'];
+  if (t.includes('sales') || t.includes('how do customers find')) return ['Word of mouth','Inbound / content','Outbound / cold','E-commerce','Partnerships / channel'];
+  return [];
+}
+
+async function callClaude(userMsg) {
+  history.push({ role: 'user', content: userMsg });
+  fullTranscript += `\nClient: ${userMsg}`;
+  addThinking();
+  document.getElementById('send-btn').disabled = true;
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 400, system: SYSTEM, messages: history })
+    });
+    const data = await res.json();
+    const reply = (data.content?.[0]?.text || '').trim();
+    removeThinking();
+
+    if (reply.includes('ASSESSMENT_COMPLETE')) {
+      document.getElementById('input-row').style.display = 'none';
+      document.getElementById('progress-fill').style.width = '100%';
+      document.getElementById('progress-pct').textContent = '100%';
+      document.getElementById('progress-text').textContent = 'Building your report…';
+      addMsg('ai', 'Perfect — I have what I need. Generating your brand report now.');
+      await generateReport();
+    } else {
+      history.push({ role: 'assistant', content: reply });
+      fullTranscript += `\nStrategist: ${reply}`;
+      questionCount++;
+      updateProgress();
+      addMsg('ai', reply, detectOpts(reply));
+      document.getElementById('input-row').style.display = 'flex';
+      document.getElementById('send-btn').disabled = false;
+      setTimeout(() => document.getElementById('free-input').focus(), 100);
+    }
+  } catch (e) {
+    removeThinking();
+    addMsg('ai', 'Something went wrong — please try again.');
+    document.getElementById('send-btn').disabled = false;
+  }
+}
+
+function selectOpt(val) {
+  document.querySelectorAll('.opt-chip').forEach(c => { c.disabled = true; if (c.textContent.trim() === val) c.classList.add('selected'); });
+  addMsg('user', val);
+  callClaude(val);
+}
+
+function sendFreeText() {
+  const input = document.getElementById('free-input');
+  const val = input.value.trim();
+  if (!val) return;
+  input.value = '';
+  input.style.height = 'auto';
+  addMsg('user', val);
+  callClaude(val);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const fi = document.getElementById('free-input');
+  if (fi) {
+    fi.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFreeText(); } });
+    fi.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 100) + 'px'; });
+  }
+});
+
+async function generateReport() {
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: REPORT_SYSTEM,
+        messages: [{ role: 'user', content: `Full assessment transcript:\n${fullTranscript}\n\nGenerate the brand assessment JSON.` }]
+      })
+    });
+    const data = await res.json();
+    let raw = (data.content?.[0]?.text || '{}').replace(/```json|```/g, '').trim();
+    reportData = JSON.parse(raw);
+    renderReport(reportData);
+  } catch (e) {
+    addMsg('ai', 'Report generation encountered an error. Please refresh and try again.');
+  }
+}
+
+function renderReport(r) {
+  const card = document.getElementById('report-card');
+  card.innerHTML = `
+    <div class="report-header">
+      <div class="tier-badge">${r.tier || ''}</div>
+      <h3>${r.headline || 'Your Brand Assessment'}</h3>
+      <p>${r.tier_note || ''}</p>
+    </div>
+    <div class="report-body">
+      <div class="score-row">
+        <div class="score-cell"><div class="score-num">${r.brand_score}/10</div><div class="score-lbl">Brand</div></div>
+        <div class="score-cell"><div class="score-num">${r.marketing_score}/10</div><div class="score-lbl">Marketing</div></div>
+        <div class="score-cell"><div class="score-num">${r.sales_score}/10</div><div class="score-lbl">Sales</div></div>
+      </div>
+      <div class="report-block"><div class="report-block-title">Assessment</div><div class="report-block-text">${r.summary || ''}</div></div>
+      <div class="report-block"><div class="report-block-title">Top priority right now</div><div class="report-block-text">${r.top_priority || ''}</div></div>
+      <div class="report-block">
+        <div class="report-block-title">Your channel stack</div>
+        <div class="platform-tags">${(r.platforms || []).map(p => `<span class="platform-tag">${p}</span>`).join('')}</div>
+        <div class="report-block-text" style="margin-top:10px">${r.platform_rationale || ''}</div>
+      </div>
+      <div class="report-block"><div class="report-block-title">12-month roadmap</div><div class="report-block-text">${r.twelve_month_roadmap || ''}</div></div>
+      <div class="report-block"><div class="report-block-title">Financial outlook — ${r.budget_tier || ''}</div><div class="report-block-text">${r.financial_outlook || ''}</div></div>
+      <div class="cm-fit-block"><div class="report-block-title">How CitrusMelon fits</div><div class="report-block-text">${r.citrusmelon_fit || ''}</div></div>
+    </div>`;
+  document.getElementById('report-section').style.display = 'block';
+  document.getElementById('report-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function downloadReport() {
+  const r = reportData || {};
+  const name = userData.name || 'Your';
+  const lines = [
+    'CITRUSMELON — BRAND INTELLIGENCE REPORT',
+    '========================================',
+    `Prepared for: ${name}  |  Industry: ${userData.industry || ''}`,
+    '',
+    `TIER: ${r.tier}`,
+    `${r.headline}`,
+    `${r.tier_note}`,
+    '',
+    `Brand: ${r.brand_score}/10   Marketing: ${r.marketing_score}/10   Sales: ${r.sales_score}/10`,
+    '',
+    'ASSESSMENT', r.summary, '',
+    'TOP PRIORITY', r.top_priority, '',
+    'CHANNEL STACK', (r.platforms || []).join(' · '), r.platform_rationale, '',
+    '12-MONTH ROADMAP', r.twelve_month_roadmap, '',
+    `FINANCIAL OUTLOOK (${r.budget_tier})`, r.financial_outlook, '',
+    'HOW CITRUSMELON FITS', r.citrusmelon_fit, '',
+    '----------------------------------------',
+    'citrusmelon.com'
+  ];
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `CitrusMelon_Brand_Report_${(userData.name || 'Assessment').replace(/\s+/g,'_')}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function startAssessment() {
+  const name = (document.getElementById('f-name').value.trim() + ' ' + document.getElementById('f-last').value.trim()).trim();
+  const email = document.getElementById('f-email').value.trim();
+  const industry = document.getElementById('f-industry').value;
+
+  if (!name || !email || !industry) {
+    alert('Please fill in all fields to begin.');
+    return;
+  }
+
+  userData = { name, email, industry };
+
+  document.getElementById('gate-form').style.display = 'none';
+  document.getElementById('assessment-section').style.display = 'block';
+  document.getElementById('assessment-section').scrollIntoView({ behavior: 'smooth' });
+
+  const opener = `Good to meet you, ${name.split(' ')[0]}. Let's get into it. What does ${industry !== 'Other' ? 'your ' + industry.toLowerCase().split('/')[0].trim() + ' business' : 'your business'} actually do, and who are you selling to?`;
+  history.push({ role: 'assistant', content: opener });
+  fullTranscript = `Industry: ${industry}\nStrategist: ${opener}`;
+  addMsg('ai', opener);
+  document.getElementById('input-row').style.display = 'flex';
+  questionCount = 1;
+  updateProgress();
+  setTimeout(() => document.getElementById('free-input').focus(), 400);
+}
+</script>
+</body>
+</html>
